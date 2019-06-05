@@ -25,7 +25,6 @@ import sys
 
 parser = argparse.ArgumentParser(description='Converts a list of delimited values into a Zabbix LLD JSON for simple list based Low Level Discoveries.')
 parser.add_argument('--delimiter', '-d', default = ',', help='Delimiter character used, default is ",".')
-parser.add_argument('--indent', '-i', type=int, choices=xrange(0, 5), default=None, help='Indentation level of JSON representation.')
 parser.add_argument('--name', '-n', type=str, default="NAME", help='Name of the discovery macro, defaults to "{#NAME}". Only specify the name, this script will add the macro characters "{#...}" for you.')
 parser.add_argument('--value', '-v', type=str, default="VALUE", help='Name of the discovery macro, defaults to "{#VALUE}". Only specify the name, this script will add the macro characters "{#...}" for you.')
 parser.add_argument('items', type=str, help='List of items to convert.')
@@ -61,7 +60,7 @@ def processList(items, delimiter = ','):
     return result
 
 def printJson(result):
-    json.dump(result, sys.stdout, indent=args.indent)
+    json.dump(result, sys.stdout)
 
 if __name__ == '__main__':
     try:
