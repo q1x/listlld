@@ -1,5 +1,5 @@
 # listlld
-Zabbix Low Level Discovery from a list. Currently 2 discovery macros are supported at the same time.
+Zabbix Low Level Discovery from a list. Currently 2 discovery macros are supported at the same time, {#NAME} and {#VALUE} by default.
 
 ##  Usage
 ```
@@ -32,7 +32,7 @@ By specifying `listlld foo,bar,baz` the following output will be generated:
 {"data": [{"{#NAME}": "foo"}, {"{#NAME}": "bar"}, {"{#NAME}": "baz"}]}
 ```
 
-Alternatively, values can be specified as well in the form of `listlld foo:123,bar:456,baz:789`, this will result in:
+Alternatively, items can be specified as well in the form of `listlld foo:123,bar:456,baz:789`, this will result in:
 
 ```
 {"data": [{"{#VALUE}": "123", "{#NAME}": "foo"}, {"{#VALUE}": "456", "{#NAME}": "bar"}, {"{#VALUE}": "789", "{#NAME}": "baz"}]}
@@ -41,13 +41,13 @@ Alternatively, values can be specified as well in the form of `listlld foo:123,b
 The names of the discovery fields can be specified through the `--name` and `--value` arguments.
 
 ### Recommended usage in Zabbix
-Place the file `listlld` in the `ExternalScripts` directory on your Zabbix server (and/or proxies).
+Place the file `listlld` in the [ExternalScripts](https://www.zabbix.com/documentation/4.0/manual/appendix/config/zabbix_server) directory on your Zabbix server (and/or proxies).
 
-On your host or template, create a `usermacro` that contains the list of 'discovered' items:
+On your host or template, create a [usermacro](https://www.zabbix.com/documentation/4.0/manual/config/macros/usermacros) that contains the list of 'discovered' items:
 
 `{$MYLLDLIST}` = `foo:123,bar:456,baz:789`
 
-You can now create a discovery rule on the host/template using an external check with the following key (mind the `"`):
+You can now create a discovery rule on the host/template using an [external check](https://www.zabbix.com/documentation/4.0/manual/config/items/itemtypes/external) with the following key (mind the quotes!):
 ```
 listlld["{$MYLLDLIST}"]
 ```
