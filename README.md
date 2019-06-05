@@ -49,9 +49,9 @@ On your host or template, create a `usermacro` that contains the list of 'discov
 
 `{$MYLLDLIST}` = `foo:123,bar:456,baz:789`
 
-You can now create a discovery rule on the host/template using an external check with the following key:
+You can now create a discovery rule on the host/template using an external check with the following key (mind the "):
 ```
-listlld[{$MYLLDLIST}]
+listlld["{$MYLLDLIST}"]
 ```
 This will now allow you to use the `{#NAME}` and `{#VALUE}` discovery macros in your prototypes.
 
