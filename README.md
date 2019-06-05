@@ -49,7 +49,7 @@ On your host or template, create a `usermacro` that contains the list of 'discov
 
 `{$MYLLDLIST}` = `foo:123,bar:456,baz:789`
 
-You can now create a discovery rule on the host/template using an external check with the following key (mind the "):
+You can now create a discovery rule on the host/template using an external check with the following key (mind the `"`):
 ```
 listlld["{$MYLLDLIST}"]
 ```
