@@ -3,7 +3,7 @@ Zabbix Low Level Discovery from a list. Currently 2 discovery macros are support
 
 ##  Usage
 ```
-usage: listlld [-h] [--delimiter DELIMITER] [--indent {0,1,2,3,4}]
+usage: listlld [-h] [--delimiter DELIMITER]
                [--name NAME] [--value VALUE]
                items
 
@@ -17,8 +17,6 @@ optional arguments:
   -h, --help            show this help message and exit
   --delimiter DELIMITER, -d DELIMITER
                         Delimiter character used, default is ",".
-  --indent {0,1,2,3,4}, -i {0,1,2,3,4}
-                        Indentation level of JSON representation.
   --name NAME, -n NAME  Name of the discovery macro, defaults to "{#NAME}".
                         Only specify the name, this script will add the macro
                         characters "{#...}" for you.
