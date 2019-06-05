@@ -1,0 +1,71 @@
+#!/usr/bin/python
+#-*- coding: utf-8 -*-
+
+# Copyright (C) 2019 Raymond Kuiper
+# Forked from csv-to-lld.py, copyright (C) 2015  Volker Fröhlich
+# 
+# This program is free software; you can redistribute it and/or
+# modify it under the terms of the GNU General Public License
+# as published by the Free Software Foundation; either version 2
+# of the License, or (at your option) any later version.
+# 
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+# 
+# You should have received a copy of the GNU General Public License
+# along with this program; if not, write to the Free Software
+# Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
+
+import argparse
+import json
+import re
+import sys
+
+parser = argparse.ArgumentParser(description='Converts a list of delimited values into a Zabbix LLD JSON for simple list based Low Level Discoveries.')
+parser.add_argument('--delimiter', '-d', default = ',', help='Delimiter character used, default is ",".')
+parser.add_argument('--indent', '-i', type=int, choices=xrange(0, 5), default=None, help='Indentation level of JSON representation.')
+parser.add_argument('--name', '-n', type=str, default="NAME", help='Name of the discovery macro, defaults to "{#NAME}". Only specify the name, this script will add the macro characters "{#...}" for you.')
+parser.add_argument('--value', '-v', type=str, default="VALUE", help='Name of the discovery macro, defaults to "{#VALUE}". Only specify the name, this script will add the macro characters "{#...}" for you.')
+parser.add_argument('items', type=str, help='List of items to convert.')
+args = parser.parse_args()
+
+def verifyMacro(macro):
+    # Allowed symbols for LLD macro names are 0-9 , A-Z , _ , . 
+    # The characters must be uppercase and the macros follow this form: {#<FIELDNAME>}
+    pattern = re.compile('^[A-Z0-9_.]+$')
+    if pattern.search(macro.upper()) == None:
+        return False
+    return True
+
+def processList(items, delimiter = ','):
+    listResult = []
+    if verifyMacro(args.name):
+        namemacro = '{#' + args.name.upper() + '}'
+        if verifyMacro(args.value):
+            valuemacro = '{#' + args.value.upper() + '}'
+    else:
+        sys.exit('Macro name contains invalid charaters! Allowed characters are: 0-9 , A-Z , _ , .\n')
+
+    pattern = re.compile('^.+:.+$')
+    for item in items.split(delimiter):
+        if pattern.search(item.upper()) == None:
+            listResult.append({namemacro: item})
+        else:
+            for key,value in [item.split(':',1)]:
+                listResult.append({namemacro: key, valuemacro: value})
+
+    # Create the final dictionary
+    result = { 'data': listResult }
+    return result
+
+def printJson(result):
+    json.dump(result, sys.stdout, indent=args.indent)
+
+if __name__ == '__main__':
+    try:
+        printJson(processList(args.items, delimiter=args.delimiter))
+    except (KeyboardInterrupt):
+        sys.stderr.write('\n')
+
