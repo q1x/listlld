@@ -53,4 +53,4 @@ listlld["{$MYLLDLIST}"]
 ```
 This will now allow you to use the `{#NAME}` and `{#VALUE}` discovery macros in your prototypes.
 
-To add or remove 'discoveries', simply edit the usermacro.
+To add or remove 'discovered' items, triggers, etc., simply edit the usermacro.
